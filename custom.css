@@ -1,0 +1,15 @@
+.side_nav_filters{
+	top:12px;
+}
+
+#table-container{
+	overflow: auto;
+	max-height: 300px;
+	width: 300px;
+	position: relative;
+}
+
+#table-container-parent{
+	position: relative;
+	clear: both;
+}
