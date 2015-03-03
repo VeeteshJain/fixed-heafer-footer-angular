@@ -620,10 +620,10 @@
 </div>
 <input type="text" placeholder="table Status" ng-model='tableStatus'>
 <input type="text" placeholder="colWidth" ng-model='colWidth[0]'>
-<div class="col-md-8" id="table-container-parent">
+<div class="col-md-4">
   <tablecontainer>
     <div id="table-container">
-      <table class="table table-bordered" fixed-header-footer='thead-tfoot' refresh='{{tableStatus}}'>
+      <table class="table my-table table-bordered" fixed-header-footer='thead-tfoot' refresh='{{tableStatus}}'>
         <thead>
           <tr>
             <th width="10%">Id</th>

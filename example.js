@@ -176,7 +176,7 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
     cloneHeadFoot.thead.find('tfoot').empty();
     cloneHeadFoot.tfoot.find('thead').empty();
     cloneHeadFoot.tfoot.css({'background-color':'blue'});
-    debugger;
+
     var elHead = $compile(cloneHeadFoot.thead)(scope, function(){});
     var elFoot = $compile(cloneHeadFoot.tfoot)(scope, function(){});
     /*
@@ -186,6 +186,8 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
     container.append(elFoot);*/
     var container = el;
     var tablecontainer = $document.find('tablecontainer');
+    tablecontainer.wrap('<div style="position: relative;clear: both;"></div>');
+    debugger;
     /*
     //append in parallel to table element
     el.after(elHead);
@@ -258,6 +260,7 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
       styles.width += 'px';
       styles.height += 'px';
       delete styles.height;
+      delete styles.left;
       return styles;
     }
     $timeout(function(){
