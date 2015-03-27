@@ -163,11 +163,7 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
     cloneNode.css({
       'background-color':'red',
       'z-index': 2,
-      'margin-bottom': '0px',
-      'border-collapse': 'collapse',
-      'display': 'table',
-      'margin': '0px',
-      'table-layout': 'fixed'
+      'margin-bottom': 0
     });
     var cloneHeadFoot = {
       'thead': cloneNode.clone(),
@@ -177,6 +173,7 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
     cloneHeadFoot.tfoot.find('thead').empty();
     cloneHeadFoot.tfoot.css({'background-color':'blue'});
 
+
     var elHead = $compile(cloneHeadFoot.thead)(scope, function(){});
     var elFoot = $compile(cloneHeadFoot.tfoot)(scope, function(){});
     /*
@@ -185,17 +182,69 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
     container.append(elHead);
     container.append(elFoot);*/
     var container = el;
-    var tablecontainer = $document.find('tablecontainer');
-    tablecontainer.wrap('<div style="position: relative;clear: both;"></div>');
-    debugger;
+    var tablecontainer = el.parent().parent();
+    tablecontainer.wrap('<div style="position: relative;clear: both;overflow:scroll"></div>');
     /*
     //append in parallel to table element
     el.after(elHead);
     el.after(elFoot);*/
     tablecontainer.append(elHead);
     tablecontainer.append(elFoot);
-    elHead = elHead.wrap('<div></div>').parent();
-    elFoot = elFoot.wrap('<div></div>').parent();
+    elHead = elHead.wrap('<div style="position: absolute"></div>').parent();
+    elFoot = elFoot.wrap('<div style="position: absolute"></div>').parent();
+
+    function getSetWidth(source, target){
+      var index = 0;
+      for(index = 0 ; index < source.length ; index++){
+        angular.element(target[index]).css({
+          'width': source[index].getBoundingClientRect().width+'px'
+        });
+      }
+    }
+
+    function refreshHeaderFooter2($event){
+      var headerStyle = {},
+      footerStyle = {};
+      var pageYOffset = $window.pageYOffset;
+      var tableParent = el.parent().parent().parent();
+      var parnetContainer = $position.offset(tableParent);
+      var positionHead = $position.position(el.find('thead'));
+      var positionFoot = $position.position(el.find('tfoot'));
+      angular.extend(headerStyle, {height : positionHead.height});
+      angular.extend(footerStyle, {height : positionFoot.height});
+
+      angular.extend(headerStyle, {width: $position.offset(el).width});
+      angular.extend(footerStyle, {width: $position.offset(el).width});
+
+      headerStyle.top = 0;
+
+      var topCorr = $window.pageYOffset - parnetContainer.top;
+      //console.log(topCorr +' '+ $window.pageYOffset +' '+ parnetContainer.top+' '+tableParent[0].scrollTop);
+      if(topCorr > 0 && parnetContainer.height >= topCorr){
+        headerStyle.top += topCorr + tableParent[0].scrollTop;
+      }else{
+        //headerStyle.top = $event.currentTarget.scrollTop;
+        headerStyle.top = tableParent[0].scrollTop;
+      }
+
+      var bottomCorr = (parnetContainer.top + parnetContainer.height) - (pageYOffset + $window.innerHeight);
+      //console.log(bottomCorr +' '+ parnetContainer.top +' '+ parnetContainer.height +' '+ pageYOffset +' '+ $window.innerHeight+' '+tableParent[0].scrollTop);
+      if(bottomCorr > 0 && bottomCorr <= parnetContainer.height){
+        footerStyle.top = tableParent[0].scrollTop + parnetContainer.height - bottomCorr - footerStyle.height;
+      }else{
+        //footerStyle.top = $event.currentTarget.scrollTop + $position.position(el.parent()).height - $position.offset(el.find('tfoot')).height;
+        footerStyle.top = tableParent[0].scrollTop + parnetContainer.height - footerStyle.height - positionFoot.height;
+      }
+
+      addPx(headerStyle);
+      addPx(footerStyle);
+
+      elHead.css(headerStyle);
+      elFoot.css(footerStyle);
+      getSetWidth(el.find('thead').find('th'), elHead.find('tr').find('th'));
+      getSetWidth(el.find('tfoot').find('th'), elFoot.find('tr').find('th'));
+    }
+
     function refreshHeaderFooter(){
       debugger;
       var defaultStyle = {
@@ -211,8 +260,11 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
       angular.extend(headerStyle, defaultStyle);
       angular.extend(footerStyle, defaultStyle);
       debugger;
-      angular.extend(headerStyle, $position.offset(el.find('thead')));
-      angular.extend(footerStyle, $position.offset(el.find('tfoot')));
+      //angular.extend(headerStyle, $position.offset(el.find('thead')));
+      //angular.extend(footerStyle, $position.offset(el.find('tfoot')));
+
+      angular.extend(headerStyle, $position.position(el.find('thead')));
+      angular.extend(footerStyle, $position.position(el.find('tfoot')));
 
       angular.extend(headerStyle, {width: $position.offset(el).width});
       angular.extend(footerStyle, {width: $position.offset(el).width});
@@ -256,20 +308,18 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window','$document', 
     }
     function addPx(styles){
       styles.top += 'px';
-      styles.left += 'px';
       styles.width += 'px';
       styles.height += 'px';
-      delete styles.height;
-      delete styles.left;
       return styles;
     }
     $timeout(function(){
-      refreshHeaderFooter();
-    },1000);
+      refreshHeaderFooter2();
+    }, 100, false);
+    tablecontainer.parent('div').on('scroll', function(){
+      refreshHeaderFooter2();
+    });
     angular.element($window).on('resize scroll', function() {
-      $timeout(function(){
-        refreshHeaderFooter();
-      });
+      refreshHeaderFooter2();
     });
   }
   return{

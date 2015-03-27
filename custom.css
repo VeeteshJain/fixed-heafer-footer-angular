@@ -3,18 +3,33 @@
 }
 
 #table-container{
-	overflow: auto;
 	max-height: 300px;
 	width: 100%;
-	position: relative;
-	display: block;
 }
 
 .my-table{
-	width: 600px;
+	
 }
 
 #table-container-parent{
 	position: relative;
 	clear: both;
+}
+
+
+.homeTable{
+	overflow: scroll;
+	height: 200px;
+	width: 100%;
+	position: relative;
+}
+
+.tableWidth{
+	width: 800px;
+}
+
+.fixedTableDiv{
+	position: absolute;
+	top: 0px;
+	left: 10px;
 }
