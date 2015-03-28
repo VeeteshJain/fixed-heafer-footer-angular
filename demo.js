@@ -2,13 +2,16 @@
 var app = angular.module('demo', ['fixedHeaderFooter']);
 
 app.controller('demoCtrlOne', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
-	debugger;
 	$scope.tableOne = {
 		'height': 300,
 		'width': 300
 	};
 
+	$scope.fixedHeaderFooterTopIds = ['oneTop'];
+	$scope.fixedHeaderFooterBottomIds = ['oneBottom'];
 	$scope.fixedHeaderFooterOne = {
+		topId: 'oneTop',
+		bottomId: 'oneBottom',
 		type: 'thead-tfoot',
 		onRegisterApi: function(options, refreshCallback){
 			$scope.tableOne.refresh = function(){

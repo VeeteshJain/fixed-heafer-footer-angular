@@ -1,5 +1,50 @@
 var fixedHeaderFooter = angular.module('fixedHeaderFooter', ['ui.bootstrap']);
-fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window', '$position', function($timeout, $compile, $window, $position){
+
+fixedHeaderFooter.service('fixedHeaderFooterGroup', function(){
+  var instances = {
+    'top': {},
+    'bottom': {}
+  };
+  function getInstance(type, id){
+    return (type && id) ? instances[type][id] : undefined;
+  }
+  function addInstance(type, scope, el, attrs){
+    var args = arguments;
+    angular.forEach(scope.Ids, function(id, index){
+      instances[type][id] = args;
+    });
+  }
+  return {
+    getInstance: getInstance,
+    addInstance: addInstance
+  };
+});
+
+fixedHeaderFooter.directive('fixedHeaderFooterTop', ['topBottomDirectiveFactory', function(topBottomDirectiveFactory){
+  return topBottomDirectiveFactory.topBottomDirective('top');
+}]);
+
+fixedHeaderFooter.directive('fixedHeaderFooterBottom', ['topBottomDirectiveFactory', function(topBottomDirectiveFactory){
+  return topBottomDirectiveFactory.topBottomDirective('bottom');
+}]);
+
+fixedHeaderFooter.factory('topBottomDirectiveFactory', function(){
+  var topBottomDirective = function(type){
+    return{
+      scope: {
+        Ids: type === 'top' ? '=fixedHeaderFooterTop' : '=fixedHeaderFooterBottom'
+      },
+      controller: function($scope, $element, $attrs, fixedHeaderFooterGroup){
+        fixedHeaderFooterGroup.addInstance(type, $scope, $element, $attrs);
+      }
+    };
+  };
+  return{
+    topBottomDirective: topBottomDirective
+  };
+});
+
+fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window', '$position', 'fixedHeaderFooterGroup', function($timeout, $compile, $window, $position, fixedHeaderFooterGroup){
   function link(scope, el, attrs){
     var cloneNode = el.clone();
     //clear the body content
@@ -77,6 +122,10 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       parnetContainer.height = tableParent[0].clientHeight;
       var positionHead = $position.position(el.find('thead'));
       var positionFoot = $position.position(el.find('tfoot'));
+      var topContainer = fixedHeaderFooterGroup.getInstance('top', scope.fixedHeaderFooterOptions.topId);
+      var topContainerHeight = topContainer ? topContainer[2][0].clientHeight : 0;
+      var bottomContainer = fixedHeaderFooterGroup.getInstance('bottom', scope.fixedHeaderFooterOptions.bottomId);
+      var bottomContainerHeight = bottomContainer ? bottomContainer[2][0].clientHeight : 0;
 
       //set height and width css
       headerStyle.height = positionHead.height;
@@ -90,7 +139,7 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
 
       //header placement check
       //topCorr is number of pixel offset form header container.
-      var topCorr = pageYOffset - parnetContainer.top;
+      var topCorr = pageYOffset - parnetContainer.top + topContainerHeight;
       //console.log(topCorr +' '+ $window.pageYOffset +' '+ parnetContainer.top+' '+tableParent[0].scrollTop);
       //if topCorr is positive and less than then table container height then set header height
       //if topCorr is negative means table is in current viewport
@@ -102,7 +151,7 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
 
       //footer placement check
       //bottomCorr is number of pixel offset form header container bottom.
-      var bottomCorr = (parnetContainer.top + parnetContainer.height) - (pageYOffset + innerHeight);
+      var bottomCorr = (parnetContainer.top + parnetContainer.height) - (pageYOffset + innerHeight) + bottomContainerHeight;
       //console.log(bottomCorr +' '+ parnetContainer.top +' '+ parnetContainer.height +' '+ pageYOffset +' '+ $window.innerHeight+' '+tableParent[0].scrollTop);
       //if bottomCorr is positive and less than then table container height then set footer height
       //if topCorr is negative means table is in current viewport
