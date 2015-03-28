@@ -38,7 +38,7 @@
         <div class="col-md-12">
           <tablecontainer>
             <div id="table-container">
-              <table class="table my-table table-bordered" fixed-header-footer='fixedHeaderFooter'>
+              <table class="table my-table table-bordered" fixed-header-footer='fixedHeaderFooter1'>
                 <thead>
                   <tr>
                     <th width="10%">Id</th>
@@ -260,11 +260,15 @@
         </div>
       </div>
 
+      <div class="col-md-12">
+        <input type="number" ng-model="tableTwoHeight">
+        <button ng-click="addData()">ADD more data</button>
+      </div>
 
       <div class="col-md-4">
         <tablecontainer>
-          <div id="table-container">
-            <table class="table my-table table-bordered" fixed-header-footer='fixedHeaderFooter'>
+          <div id="table-container" ng-style="{height: addPx(tableTwoHeight)}">
+            <table class="table my-table table-bordered" fixed-header-footer='fixedHeaderFooter2'>
               <thead>
                 <tr>
                   <th width="10%" ng-click="doClick('id header')">Id</th>

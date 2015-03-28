@@ -230,6 +230,7 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window', '$position',
       var innerHeight = $window.innerHeight;
       var tableParent = el.parent().parent().parent();
       var parnetContainer = $position.offset(tableParent);
+      parnetContainer.height = tableParent[0].clientHeight;
       var positionHead = $position.position(el.find('thead'));
       var positionFoot = $position.position(el.find('tfoot'));
 
@@ -263,8 +264,17 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window', '$position',
       //if topCorr is negative means table is in current viewport
       if(bottomCorr > 0 && parnetContainer.height >= bottomCorr){
         footerStyle.top = tableParent[0].scrollTop + parnetContainer.height - bottomCorr - footerStyle.height;
+        //console.log(footerStyle.top +' '+ tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ bottomCorr +' '+ footerStyle.height);
       }else{
-        footerStyle.top = tableParent[0].scrollTop + parnetContainer.height - footerStyle.height - positionFoot.height;
+        footerStyle.top = tableParent[0].scrollTop + tableParent[0].clientHeight - footerStyle.height;
+        //console.log(footerStyle.top +' '+ tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ footerStyle.height);
+      }
+
+      //dont change footer top css to prevent prevent infinite scroll
+      //allow footer top css if no scroll
+      if( tableParent[0].scrollTop != 0 && tableParent[0].scrollTop + parnetContainer.height >= $position.position(el).height){
+        console.log(tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ $position.position(el).height);
+        delete footerStyle.top;
       }
 
       //add px prefix
@@ -314,13 +324,45 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window', '$position',
 
   }
 }]);
-function ListCtrl($scope) {
+function ListCtrl($scope, $timeout) {
 
-  $scope.fixedHeaderFooter = {
+  $scope.fixedHeaderFooter1 = {
     type: 'thead-tfoot',
     onRegisterApi: function(options, refreshCallback){
-
     }
+  };
+
+  $scope.fixedHeaderFooter2 = {
+    type: 'thead-tfoot',
+    onRegisterApi: function(options, refreshCallback){
+      $scope.tableTwoRefreshCallback = refreshCallback;
+    }
+  };
+
+  $scope.tableTwoHeight = 300;
+  $scope.addPx = function(style){
+    return style+'px';
+  };
+  $scope.$watch('tableTwoHeight', function(){
+    $timeout(function(){
+      console.log('height change');
+      $scope.tableTwoRefreshCallback.call(this);
+    });
+  });
+  $scope.addData = function(){
+    var newArray = [];
+    angular.forEach(angular.fromJson(angular.toJson($scope.items)), function(value, key){
+      newArray.push(value);
+      var newItem = angular.copy(value);
+      newItem.id += 1;
+      newArray.push(newItem);
+    });
+    debugger;
+    $scope.items = newArray;
+    $timeout(function(){
+      console.log('height change');
+      $scope.tableTwoRefreshCallback.call(this);
+    });
   };
   $scope.doClick = function(msg){
     console.log(msg);
