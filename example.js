@@ -228,7 +228,7 @@ app.directive('fixedHeaderFooter',['$timeout','$compile','$window', '$position',
       footerStyle = {};
       var pageYOffset = $window.pageYOffset;
       var innerHeight = $window.innerHeight;
-      var tableParent = tablecontainer;
+      var tableParent = el.parent().parent().parent();
       var parnetContainer = $position.offset(tableParent);
       var positionHead = $position.position(el.find('thead'));
       var positionFoot = $position.position(el.find('tfoot'));
