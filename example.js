@@ -1,7 +1,7 @@
-var app = angular.module('plunker', ['ui.bootstrap.position']);
+var app = angular.module('plunker', ['ui.bootstrap']);
 
 
-angular.module('ui.bootstrap.position', [])
+angular.module('ui.bootstrap.position-test', [])
 
 /**
  * A set of utility methods that can be use to retrieve position of DOM elements.
