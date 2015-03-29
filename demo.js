@@ -28,8 +28,22 @@ app.controller('demoCtrlOne', ['$scope', '$http', '$timeout', function($scope, $
 		return style+'px';
 	};
 
+	$scope.cols = {
+		id: {'isSelected': true},
+		balance: {'isSelected': true},
+		age: {'isSelected': true},
+		name: {'isSelected': true},
+		company: {'isSelected': true},
+		email: {'isSelected': true},
+		friends: {'isSelected': true},
+		address: {'isSelected': true}
+	};
+	$scope.$watch('cols', function(){
+		$scope.tableOne.refresh ? $scope.tableOne.refresh() : '';
+	}, true);
+
 	$http.get('500_data.json').then(function(response){
-		$scope.complexTableOne = response.data;
+		$scope.complexTableOne = response.data.splice(0, 30);
 		$scope.tableOne.refresh ? $scope.tableOne.refresh() : '';
 	});
 }]);

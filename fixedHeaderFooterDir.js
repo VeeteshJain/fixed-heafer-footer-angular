@@ -54,7 +54,7 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
     //add default css
     cloneNode.css({
       'background-color': el[0].style.backgroundColor === '' ? 'white' : el[0].style.backgroundColor,
-      'z-index': scope.fixedHeaderFooterOptions.zIndex === undefined ? 2 : scope.fixedHeaderFooterOptions.zIndex,
+      'z-index': scope.fixedHeaderFooterOptions.zIndex === undefined ? 1001 : scope.fixedHeaderFooterOptions.zIndex,
       'margin-bottom': 0
     });
     var cloneHeadFoot = {
@@ -76,6 +76,8 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
     //append compiled header footer to table container
     tablecontainer.append(elHead);
     tablecontainer.append(elFoot);
+    //el.parent().after(elHead);
+    //el.parent().after(elFoot);
 
     //add position css to cloned element and prepare the header and footer reference
     elHead = elHead.wrap('<div style="position: absolute"></div>').parent();
@@ -119,6 +121,7 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       var innerHeight = $window.innerHeight;
       var tableParent = el.parent().parent().parent();
       var parnetContainer = $position.offset(tableParent);
+      var elParentRelativePos = $position.position(el.parent());
       parnetContainer.height = tableParent[0].clientHeight;
       var positionHead = $position.position(el.find('thead'));
       var positionFoot = $position.position(el.find('tfoot'));
@@ -126,7 +129,6 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       var topContainerHeight = topContainer ? topContainer[2][0].clientHeight : 0;
       var bottomContainer = fixedHeaderFooterGroup.getInstance('bottom', scope.fixedHeaderFooterOptions.bottomId);
       var bottomContainerHeight = bottomContainer ? bottomContainer[2][0].clientHeight : 0;
-
       //set height and width css
       headerStyle.height = positionHead.height;
       footerStyle.height = positionFoot.height;
@@ -143,11 +145,14 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       //console.log(topCorr +' '+ $window.pageYOffset +' '+ parnetContainer.top+' '+tableParent[0].scrollTop);
       //if topCorr is positive and less than then table container height then set header height
       //if topCorr is negative means table is in current viewport
-      if(topCorr > 0 && parnetContainer.height >= topCorr){
+      if(topCorr > 0 && parnetContainer.height >= topCorr && elParentRelativePos.top <= tableParent[0].scrollTop){
         headerStyle.top += topCorr + tableParent[0].scrollTop;
+      }else if(elParentRelativePos.top > tableParent[0].scrollTop){
+        headerStyle.top = elParentRelativePos.top;
       }else{
         headerStyle.top = tableParent[0].scrollTop;
       }
+      //console.log(elParentRelativePos.top+' '+tableParent[0].scrollTop);
 
       //footer placement check
       //bottomCorr is number of pixel offset form header container bottom.
@@ -160,13 +165,13 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
         //console.log(footerStyle.top +' '+ tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ bottomCorr +' '+ footerStyle.height);
       }else{
         footerStyle.top = tableParent[0].scrollTop + tableParent[0].clientHeight - footerStyle.height;
-        //console.log(footerStyle.top +' '+ tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ footerStyle.height);
       }
 
       //dont change footer top css to prevent prevent infinite scroll
       //allow footer top css if no scroll
-      if( tableParent[0].scrollTop != 0 && tableParent[0].scrollTop + parnetContainer.height >= $position.position(el).height){
-        console.log(tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ $position.position(el).height);
+      //console.log(tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ $position.position(el).height);
+      if( tableParent[0].scrollTop != 0 && tableParent[0].scrollTop + parnetContainer.height >= $position.position(el).height + elParentRelativePos.top){
+        //console.log(tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ $position.position(el).height);
         delete footerStyle.top;
       }
 

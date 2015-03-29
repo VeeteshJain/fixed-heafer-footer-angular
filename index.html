@@ -79,34 +79,48 @@
           </div>
         </form>
       </div>
-      <div class="col-md-6">.col-md-6</div>
+      <div class="col-md-6">
+        <ul>
+          <li ng-repeat="(key, value) in cols">
+            <input type="checkbox" ng-model="value.isSelected">{{key}}</input>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
         <tablecontainer>
+          <form>
+            <div class="form-group">
+              <label >table one HEIGHT setting</label>
+              <input type="number" class="form-control" placeholder="height" ng-model="tableOne.height">
+              <label >table one WIDTH setting</label>
+              <input type="number" class="form-control" placeholder="width" ng-model="tableOne.width">
+            </div>
+          </form>
           <div class="table-responsive" ng-style="{'height':addPx(tableOne.height),'width': addPx(tableOne.width)}">
-            <table class="table table-striped table-bordered table-condensed table-hover font-size-custom" fixed-header-footer="fixedHeaderFooterOne">
+            <table class="table table-striped table-bordered table-condensed table-hover font-size-custom table-no-bottom-margin" fixed-header-footer="fixedHeaderFooterOne">
               <thead class="table-bg-color">
                 <tr>
-                  <th>id</th>
-                  <th>balance</th>
-                  <th>age</th>
-                  <th>name</th>
-                  <th>company</th>
-                  <th>email</th>
-                  <th>frields</th>
-                  <th>address</th>
+                  <th ng-show="cols['id'].isSelected">id</th>
+                  <th ng-show="cols['balance'].isSelected">balance</th>
+                  <th ng-show="cols['age'].isSelected">age</th>
+                  <th ng-show="cols['name'].isSelected">name</th>
+                  <th ng-show="cols['company'].isSelected">company</th>
+                  <th ng-show="cols['email'].isSelected">email</th>
+                  <th ng-show="cols['friends'].isSelected">friends</th>
+                  <th ng-show="cols['address'].isSelected">address</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="(key, value) in complexTableOne">
-                  <td scope="row">{{value.id}}</td>
-                  <td>{{value.balance}}</td>
-                  <td>{{value.age}}</td>
-                  <td>{{value.name}}</td>
-                  <td>{{value.company}}</td>
-                  <td>{{value.email}}</td>
-                  <td>
+                  <td scope="row" ng-show="cols['id'].isSelected">{{value.id}}</td>
+                  <td ng-show="cols['balance'].isSelected">{{value.balance}}</td>
+                  <td ng-show="cols['age'].isSelected">{{value.age}}</td>
+                  <td ng-show="cols['name'].isSelected">{{value.name}}</td>
+                  <td ng-show="cols['company'].isSelected">{{value.company}}</td>
+                  <td ng-show="cols['email'].isSelected">{{value.email}}</td>
+                  <td ng-show="cols['friends'].isSelected">
                     <div class="btn-group" dropdown>
                       <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                         Frields<span class="caret"></span>
@@ -118,7 +132,7 @@
                       </ul>
                     </div>
                   </td>
-                  <td>
+                  <td ng-show="cols['address'].isSelected">
                     <address>
                       <strong>{{value.address.street}}</strong> {{value.address.city}} {{value.address.zip}}</br>
                       <abbr title="Phone">P:</abbr>{{value.phone}}
@@ -128,17 +142,16 @@
               </tbody>
               <tfoot class="table-bg-color">
                 <tr>
-                  <th>id</th>
-                  <th>balance</th>
-                  <th>age</th>
-                  <th>name</th>
-                  <th>company</th>
-                  <th>email</th>
-                  <th>frields</th>
-                  <th>address</th>
+                  <th ng-show="cols['id'].isSelected">id</th>
+                  <th ng-show="cols['balance'].isSelected">balance</th>
+                  <th ng-show="cols['age'].isSelected">age</th>
+                  <th ng-show="cols['name'].isSelected">name</th>
+                  <th ng-show="cols['company'].isSelected">company</th>
+                  <th ng-show="cols['email'].isSelected">email</th>
+                  <th ng-show="cols['friends'].isSelected">friends</th>
+                  <th ng-show="cols['address'].isSelected">address</th>
                 </tr>
               </tfoot>
-
             </table>
           </div>
         </tablecontainer>

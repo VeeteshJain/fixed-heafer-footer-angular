@@ -15,6 +15,9 @@ body { padding-top: 70px; }
 	background-color: gray;
 }
 
+.table-no-bottom-margin{
+	margin-bottom: 0px;
+}
 
 
 
