@@ -48,40 +48,56 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
   function link(scope, el, attrs){
     var cloneNode = el.clone();
     //clear the body content
-    cloneNode.find('tbody').empty();
+    cloneNode.find('tbody').empty().remove('tbody');
+
     //remove the directive name to prevent infinite re-compile direcrive
     cloneNode.removeAttr('fixed-header-footer');
+
     //add default css
     cloneNode.css({
-      'background-color': el[0].style.backgroundColor === '' ? 'white' : el[0].style.backgroundColor,
-      'z-index': scope.fixedHeaderFooterOptions.zIndex === undefined ? 1001 : scope.fixedHeaderFooterOptions.zIndex,
       'margin-bottom': 0
     });
     var cloneHeadFoot = {
       'thead': cloneNode.clone(),
       'tfoot': cloneNode.clone()
     };
-    cloneHeadFoot.thead.find('tfoot').empty();
-    cloneHeadFoot.tfoot.find('thead').empty();
+    cloneHeadFoot.thead.find('tfoot').empty().remove('tfoot');
+    cloneHeadFoot.tfoot.find('thead').empty().remove('thead');
     //cloneHeadFoot.tfoot.css({'background-color':'blue'});
-
-    //compile the cloned header and footer with controller scope
-    var elHead = $compile(cloneHeadFoot.thead)(scope.$parent, function(){});
-    var elFoot = $compile(cloneHeadFoot.tfoot)(scope.$parent, function(){});
 
     //prepare table container
     var tablecontainer = el.parent().parent();
-    tablecontainer.wrap('<div style="position: relative;clear: both;overflow:scroll"></div>');
+    tablecontainer.wrap('<div></div>');
+    tablecontainer.parent().css({
+      'position': 'relative',
+      'clear': 'both',
+      'overflow': 'scroll'
+    });
+
+    //add position css to cloned element and prepare the header and footer reference
+    var elHead = cloneHeadFoot.thead.wrap('<div></div>').parent();
+    var elFoot = cloneHeadFoot.tfoot.wrap('<div></div>').parent();
+
+    elHead.css({
+      'position': 'absolute',
+      'z-index': scope.fixedHeaderFooterOptions.zIndex === undefined ? 1001 : scope.fixedHeaderFooterOptions.zIndex,
+      'background-color': el[0].style.backgroundColor === '' ? 'white' : el[0].style.backgroundColor
+    });
+    elFoot.css({
+      'position': 'absolute',
+      'z-index': scope.fixedHeaderFooterOptions.zIndex === undefined ? 1001 : scope.fixedHeaderFooterOptions.zIndex,
+      'background-color': el[0].style.backgroundColor === '' ? 'white' : el[0].style.backgroundColor
+    });
+
+    //compile the cloned header and footer with controller scope
+    elHead = $compile(elHead)(scope.$parent, function(){});
+    elFoot = $compile(elFoot)(scope.$parent, function(){});
 
     //append compiled header footer to table container
     tablecontainer.append(elHead);
     tablecontainer.append(elFoot);
     //el.parent().after(elHead);
     //el.parent().after(elFoot);
-
-    //add position css to cloned element and prepare the header and footer reference
-    elHead = elHead.wrap('<div style="position: absolute"></div>').parent();
-    elFoot = elFoot.wrap('<div style="position: absolute"></div>').parent();
 
     /**
      * copy the width css from source to target
