@@ -44,6 +44,19 @@ fixedHeaderFooter.factory('topBottomDirectiveFactory', function(){
   };
 });
 
+fixedHeaderFooter.directive('fixedHeaderFooterStyle', ['$interpolate', function($interpolate){
+  return {
+    link: function(scope, el, attrs){
+      var interpolateFn = $interpolate(el.text(), true);
+      if (interpolateFn) {
+        scope.$watch(interpolateFn, function(value) {
+          el.text(value);
+        });
+      }
+    }
+  }
+}]);
+
 fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window', '$position', 'fixedHeaderFooterGroup', function($timeout, $compile, $window, $position, fixedHeaderFooterGroup){
   function link(scope, el, attrs){
     var cloneNode = el.clone();
@@ -104,9 +117,20 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
      **/
      function addPx(styles){
       for(style in styles){
+        if(style === 'position'){
+          continue;
+        }
         styles[style] += 'px';
       }
       return styles;
+    }
+
+    function getStyle(styles){
+      var newStyles = '';
+      for(style in styles){
+        newStyles += style + ':' + styles[style] + 'px;';
+      }
+      return newStyles;
     }
 
     /**
@@ -115,8 +139,12 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
      * @return{null}
      **/
      function refreshHeaderFooter(){
-      var headerStyle = {},
-      footerStyle = {};
+      var headerStyle = {
+        position: 'absolute'
+      },
+      footerStyle = {
+        position: 'absolute'
+      };
       var pageYOffset = $window.pageYOffset;
       var innerHeight = $window.innerHeight;
       var tableParent = el.parent().parent().parent();
@@ -146,7 +174,9 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       //if topCorr is positive and less than then table container height then set header height
       //if topCorr is negative means table is in current viewport
       if(topCorr > 0 && parnetContainer.height >= topCorr && elParentRelativePos.top <= tableParent[0].scrollTop){
-        headerStyle.top += topCorr + tableParent[0].scrollTop;
+        //headerStyle.top += topCorr + tableParent[0].scrollTop;
+        headerStyle.position = 'fixed';
+        headerStyle.top = topContainerHeight;
       }else if(elParentRelativePos.top > tableParent[0].scrollTop){
         headerStyle.top = elParentRelativePos.top;
       }else{
@@ -161,7 +191,8 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       //if bottomCorr is positive and less than then table container height then set footer height
       //if topCorr is negative means table is in current viewport
       if(bottomCorr > 0 && parnetContainer.height >= bottomCorr){
-        footerStyle.top = tableParent[0].scrollTop + parnetContainer.height - bottomCorr - footerStyle.height;
+        footerStyle.position = 'fixed';
+        footerStyle.top = innerHeight - bottomContainerHeight - footerStyle.height;
         //console.log(footerStyle.top +' '+ tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ bottomCorr +' '+ footerStyle.height);
       }else{
         footerStyle.top = tableParent[0].scrollTop + tableParent[0].clientHeight - footerStyle.height;
@@ -178,6 +209,13 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       //add px prefix
       addPx(headerStyle);
       addPx(footerStyle);
+
+      /*var headerStyles = getStyle(headerStyle);
+      headerStyles = '.header-style{' + headerStyles + '}';
+      var footerStyles = getStyle(footerStyle);
+      footerStyles = '.footer-style{' + footerStyles + '}';
+      var newStyles = headerStyles + '\n' + footerStyles;
+      scope.fixedHeaderFooterOptions.styles = newStyles;*/
 
       //set new css style
       elHead.css(headerStyle);
@@ -201,10 +239,12 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
     //bind the element scroll event
     tablecontainer.parent('div').on('scroll', function(){
       refreshHeaderFooter();
+      //scope.$apply();
     });
     //bind the window scroll and resize events.
     angular.element($window).on('resize scroll', function() {
       refreshHeaderFooter();
+      //scope.$apply();
     });
 
     //remove all binding on detaching table form DOM.
