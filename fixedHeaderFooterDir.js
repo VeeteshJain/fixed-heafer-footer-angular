@@ -93,8 +93,11 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
     //el.parent().after(elFoot);
 
     //add position css to cloned element and prepare the header and footer reference
-    elHead = elHead.wrap('<div style="position: absolute"></div>').parent();
-    elFoot = elFoot.wrap('<div style="position: absolute"></div>').parent();
+    elHead = elHead.wrap('<div style="position: absolute"></div>').parent().wrap('<div></div>');
+    elFoot = elFoot.wrap('<div style="position: absolute"></div>').parent().wrap('<div></div>');
+
+    var elHeadParent = elHead.parent();
+    var elFootParent = elFoot.parent();
 
     /**
      * copy the width css from source to target
@@ -173,10 +176,15 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       //console.log(topCorr +' '+ $window.pageYOffset +' '+ parnetContainer.top+' '+tableParent[0].scrollTop);
       //if topCorr is positive and less than then table container height then set header height
       //if topCorr is negative means table is in current viewport
+      elHeadParent.css({'position':'','top': '','overflow':''});
       if(topCorr > 0 && parnetContainer.height >= topCorr && elParentRelativePos.top <= tableParent[0].scrollTop){
         //headerStyle.top += topCorr + tableParent[0].scrollTop;
         headerStyle.position = 'fixed';
         headerStyle.top = topContainerHeight;
+        elHeadParent.css({'position':'fixed','top': headerStyle.top,'overflow':'hidden','width':tableParent[0].clientWidth});
+        headerStyle.top = '';
+        headerStyle.position = '';
+        elHeadParent[0].scrollLeft = tableParent[0].scrollLeft;
       }else if(elParentRelativePos.top > tableParent[0].scrollTop){
         headerStyle.top = elParentRelativePos.top;
       }else{
@@ -186,6 +194,7 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
 
       //footer placement check
       //bottomCorr is number of pixel offset form header container bottom.
+      elFootParent.css({'position':'','top': '','overflow':'','width':''});
       var bottomCorr = (parnetContainer.top + parnetContainer.height) - (pageYOffset + innerHeight) + bottomContainerHeight;
       //console.log(bottomCorr +' '+ parnetContainer.top +' '+ parnetContainer.height +' '+ pageYOffset +' '+ $window.innerHeight+' '+tableParent[0].scrollTop);
       //if bottomCorr is positive and less than then table container height then set footer height
@@ -193,6 +202,10 @@ fixedHeaderFooter.directive('fixedHeaderFooter',['$timeout','$compile','$window'
       if(bottomCorr > 0 && parnetContainer.height >= bottomCorr){
         footerStyle.position = 'fixed';
         footerStyle.top = innerHeight - bottomContainerHeight - footerStyle.height;
+        elFootParent.css({'position':'fixed','top': footerStyle.top,'overflow':'hidden','width':tableParent[0].clientWidth});
+        footerStyle.top = '';
+        footerStyle.position = '';
+        elFootParent[0].scrollLeft = tableParent[0].scrollLeft;
         //console.log(footerStyle.top +' '+ tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ bottomCorr +' '+ footerStyle.height);
       }else{
         footerStyle.top = tableParent[0].scrollTop + tableParent[0].clientHeight - footerStyle.height;
