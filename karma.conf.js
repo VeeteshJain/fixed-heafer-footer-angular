@@ -11,14 +11,22 @@ module.exports = function(config) {
     //'main-test.js'
     ],
     exclude: ['bower_components/*'],
-    reporters: [ 'progress' ],
+    preprocessors: {
+        'src/**/*.js': ['coverage']
+    },
+    reporters: [ 'progress', 'coverage' ],
+    coverageReporter: {
+        type : 'html',
+        dir : 'coverage/'
+    },
     colors: true,
     autoWatch: false,
     browsers: [ 'PhantomJS' ],
     singleRun: true,
     plugins: [
     'karma-phantomjs-launcher',
-    'karma-jasmine'
+    'karma-jasmine',
+    'karma-coverage'
     ]
 });
 };
