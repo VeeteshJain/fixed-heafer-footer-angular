@@ -1,0 +1,17 @@
+{
+  "name": "angular-ui-grid",
+  "version": "3.0.0-rc.20",
+  "description": "AngularJS data grid",
+  "license": "MIT",
+  "ignore": [
+  "**/.*",
+  "node_modules",
+  "bower_components",
+  "tests"
+  ],
+  "devDependencies": {
+    "angular": "~1.2.8",
+    "angular-scenario": "~1.2.8",
+    "angular-mocks": "~1.2.8"
+  }
+}

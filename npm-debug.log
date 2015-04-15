@@ -1,0 +1,59 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'grunt-contrib-jshint@1.11.1' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose config Skipping project config: C:\Users\veetesh_jain/.npmrc. (matches userconfig)
+6 verbose cache add [ 'grunt-contrib-jshint@1.11.1', null ]
+7 verbose cache add name=undefined spec="grunt-contrib-jshint@1.11.1" args=["grunt-contrib-jshint@1.11.1",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'grunt-contrib-jshint@1.11.1',
+8 verbose parsed url   path: 'grunt-contrib-jshint@1.11.1',
+8 verbose parsed url   href: 'grunt-contrib-jshint@1.11.1' }
+9 verbose cache add name="grunt-contrib-jshint" spec="1.11.1" args=["grunt-contrib-jshint","1.11.1"]
+10 verbose parsed url { protocol: null,
+10 verbose parsed url   slashes: null,
+10 verbose parsed url   auth: null,
+10 verbose parsed url   host: null,
+10 verbose parsed url   port: null,
+10 verbose parsed url   hostname: null,
+10 verbose parsed url   hash: null,
+10 verbose parsed url   search: null,
+10 verbose parsed url   query: null,
+10 verbose parsed url   pathname: '1.11.1',
+10 verbose parsed url   path: '1.11.1',
+10 verbose parsed url   href: '1.11.1' }
+11 verbose addNamed [ 'grunt-contrib-jshint', '1.11.1' ]
+12 verbose addNamed [ '1.11.1', '1.11.1' ]
+13 silly lockFile 922dfe28-grunt-contrib-jshint-1-11-1 grunt-contrib-jshint@1.11.1
+14 verbose lock grunt-contrib-jshint@1.11.1 C:\Users\veetesh_jain\AppData\Roaming\npm-cache\922dfe28-grunt-contrib-jshint-1-11-1.lock
+15 verbose registry.get https://registry.npmjs.org/grunt-contrib-jshint not expired, no request
+16 silly lockFile 922dfe28-grunt-contrib-jshint-1-11-1 grunt-contrib-jshint@1.11.1
+17 silly lockFile 922dfe28-grunt-contrib-jshint-1-11-1 grunt-contrib-jshint@1.11.1
+18 error Error: version not found: grunt-contrib-jshint@1.11.1
+18 error     at C:\Program Files\nodejs\node_modules\npm\lib\cache\add-named.js:125:12
+18 error     at RegClient.get_ (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\get.js:130:14)
+18 error     at RegClient.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\get.js:49:12)
+18 error     at evalmachine.<anonymous>:271:14
+18 error     at C:\Program Files\nodejs\node_modules\npm\node_modules\graceful-fs\graceful-fs.js:102:5
+18 error     at Object.oncomplete (evalmachine.<anonymous>:107:15)
+19 error If you need help, you may report this *entire* log,
+19 error including the npm and node versions, at:
+19 error     <http://github.com/npm/npm/issues>
+20 error System Windows_NT 6.1.7601
+21 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "grunt-contrib-jshint@1.11.1"
+22 error cwd C:\Users\veetesh_jain\Desktop\PRO\(2014-06-18)angular phone\seed master\examples\fixed header footer\fixed-heafer-footer-angular
+23 error node -v v0.10.33
+24 error npm -v 1.4.28
+25 verbose exit [ 1, true ]
