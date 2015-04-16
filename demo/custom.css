@@ -1,0 +1,57 @@
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.font-size-custom{
+	font-size: 12px;
+}
+
+.table-overflow-x{
+	overflow-x: scroll;
+	overflow-y: scroll;
+}
+
+body { padding-top: 70px; }
+
+.table-bg-color{
+	background-color: gray;
+}
+
+.table-no-bottom-margin{
+	margin-bottom: 0px;
+}
+
+
+
+.side_nav_filters{
+	top:12px;
+}
+
+#table-container{
+	width: 100%;
+}
+
+.my-table{
+	
+}
+
+#table-container-parent{
+	position: relative;
+	clear: both;
+}
+
+
+.homeTable{
+	overflow: scroll;
+	height: 200px;
+	width: 100%;
+	position: relative;
+}
+
+.tableWidth{
+	width: 800px;
+}
+
+.fixedTableDiv{
+	position: absolute;
+	top: 0px;
+	left: 10px;
+}

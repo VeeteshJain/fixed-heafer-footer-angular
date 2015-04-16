@@ -9,9 +9,13 @@
   "bower_components",
   "tests"
   ],
-  "devDependencies": {
+  "dependencies": {
     "angular": "~1.2.8",
-    "angular-scenario": "~1.2.8",
-    "angular-mocks": "~1.2.8"
+    "bootstrap": "~3.2.0"
+    },
+    "devDependencies": {
+      "angular": "~1.2.8",
+      "angular-scenario": "~1.2.8",
+      "angular-mocks": "~1.2.8"
+    }
   }
-}
