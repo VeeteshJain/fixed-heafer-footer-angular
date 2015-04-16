@@ -1,0 +1,71 @@
+</<!DOCTYPE html>
+<html ng-app="demo">
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="../bower_components/angular/angular.js"></script>
+  <script src="../dist/fixedHeaderFooterModule.min.js"></script>
+  <script src="demo.js"></script>
+  <link href="custom.css" rel="stylesheet">
+</head>
+<body ng-controller="demoCtrlOne">
+  <input type="number" ng-model="tableOne.height">height</input>
+  <input type="number" ng-model="tableOne.width">width</input>
+  <tablecontainer>
+    <div ng-style="{'height':addPx(tableOne.height),'width': addPx(tableOne.width)}">
+      <table fixed-header-footer="fixedHeaderFooterOne">
+        <thead class="table-bg-color">
+          <tr>
+            <th ng-show="cols['id'].isSelected">id</th>
+            <th ng-show="cols['balance'].isSelected">balance</th>
+            <th ng-show="cols['age'].isSelected">age</th>
+            <th ng-show="cols['name'].isSelected">name</th>
+            <th ng-show="cols['company'].isSelected">company</th>
+            <th ng-show="cols['email'].isSelected">email</th>
+            <th ng-show="cols['friends'].isSelected">friends</th>
+            <th ng-show="cols['address'].isSelected">address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(key, value) in complexTableOne">
+            <td scope="row" ng-show="cols['id'].isSelected">{{value.id}}</td>
+            <td ng-show="cols['balance'].isSelected">{{value.balance}}</td>
+            <td ng-show="cols['age'].isSelected">{{value.age}}</td>
+            <td ng-show="cols['name'].isSelected">{{value.name}}</td>
+            <td ng-show="cols['company'].isSelected">{{value.company}}</td>
+            <td ng-show="cols['email'].isSelected">{{value.email}}</td>
+            <td ng-show="cols['friends'].isSelected">
+              <div>
+                <ul>
+                  <li ng-repeat="(index, friend) in value.friends">
+                    <a href="#">{{friend.id}} {{friend.name}}</a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+            <td ng-show="cols['address'].isSelected">
+              <address>
+                <strong>{{value.address.street}}</strong> {{value.address.city}} {{value.address.zip}}</br>
+                <abbr title="Phone">P:</abbr>{{value.phone}}
+              </address>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot class="table-bg-color">
+          <tr>
+            <th ng-show="cols['id'].isSelected">id</th>
+            <th ng-show="cols['balance'].isSelected">balance</th>
+            <th ng-show="cols['age'].isSelected">age</th>
+            <th ng-show="cols['name'].isSelected">name</th>
+            <th ng-show="cols['company'].isSelected">company</th>
+            <th ng-show="cols['email'].isSelected">email</th>
+            <th ng-show="cols['friends'].isSelected">friends</th>
+            <th ng-show="cols['address'].isSelected">address</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </tablecontainer>
+</nav>
+</body>
+</html>
