@@ -101,7 +101,7 @@ angular.module('fixedHeaderFooter', ['ui.bootstrap.position'])
      * @return{object}
      **/
      function addPx(styles){
-      for(style in styles){
+      for(var style in styles){
         if(style === 'position'){
           continue;
         }
@@ -112,7 +112,7 @@ angular.module('fixedHeaderFooter', ['ui.bootstrap.position'])
 
     function getStyle(styles){
       var newStyles = '';
-      for(style in styles){
+      for(var style in styles){
         newStyles += style + ':' + styles[style] + 'px;';
       }
       return newStyles;
@@ -196,7 +196,7 @@ angular.module('fixedHeaderFooter', ['ui.bootstrap.position'])
       //dont change footer top css to prevent prevent infinite scroll
       //allow footer top css if no scroll
       //console.log(tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ $position.position(el).height);
-      if( tableParent[0].scrollTop != 0 && tableParent[0].scrollTop + parnetContainer.height >= $position.position(el).height + elParentRelativePos.top){
+      if( tableParent[0].scrollTop !== 0 && tableParent[0].scrollTop + parnetContainer.height >= $position.position(el).height + elParentRelativePos.top){
         //console.log(tableParent[0].scrollTop +' '+ parnetContainer.height +' '+ $position.position(el).height);
         delete footerStyle.top;
       }
@@ -255,7 +255,7 @@ angular.module('fixedHeaderFooter', ['ui.bootstrap.position'])
     },
     link: link
 
-  }
+  };
 }]);
 angular.module('ui.bootstrap.position', [])
 

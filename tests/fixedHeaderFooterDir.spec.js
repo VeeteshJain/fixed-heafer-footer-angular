@@ -32,10 +32,8 @@ describe('fixedHeaderFooterGroup service tests,', function (){
 });
 
 describe('topBottomDirective Factory tests,', function (){
-  console.log('describe');
   var topBottomDirectiveFactory;
   beforeEach(function(){
-    console.log('beforeEach');
     angular.mock.module('ui.bootstrap.position');
     angular.mock.module('fixedHeaderFooter');
     inject(function(_topBottomDirectiveFactory_){
@@ -60,7 +58,6 @@ describe('topBottomDirective Factory tests,', function (){
 });
 
 describe('fixedHeaderFooterTop Directive tests,', function (){
-  console.log('describe');
   var fixedHeaderFooterGroup,
   topBottomDirectiveFactory,
   scope,
@@ -71,7 +68,6 @@ describe('fixedHeaderFooterTop Directive tests,', function (){
   controllerTop,
   controllerBottom;
   beforeEach(function(){
-    console.log('beforeEach');
     angular.mock.module('ui.bootstrap.position');
     angular.mock.module('fixedHeaderFooter');
     inject(function($rootScope, $compile, _fixedHeaderFooterGroup_, _topBottomDirectiveFactory_){
@@ -89,18 +85,17 @@ describe('fixedHeaderFooterTop Directive tests,', function (){
       controllerBottom = elementBottom.controller;
     });
   });
-it('should fixedHeaderFooterTop', function () {
-  var topInstance = fixedHeaderFooterGroup.getInstance('top','oneTop');
-  var bottomInstance = fixedHeaderFooterGroup.getInstance('bottom','oneBottom');
-  expect(topInstance[1].Ids).toBeDefined();
-  expect(topInstance[1].Ids).toEqual(['oneTop']);
-  expect(bottomInstance[1].Ids).toBeDefined();
-  expect(bottomInstance[1].Ids).toEqual(['oneBottom']);
-});
+  it('should fixedHeaderFooterTop', function () {
+    var topInstance = fixedHeaderFooterGroup.getInstance('top','oneTop');
+    var bottomInstance = fixedHeaderFooterGroup.getInstance('bottom','oneBottom');
+    expect(topInstance[1].Ids).toBeDefined();
+    expect(topInstance[1].Ids).toEqual(['oneTop']);
+    expect(bottomInstance[1].Ids).toBeDefined();
+    expect(bottomInstance[1].Ids).toEqual(['oneBottom']);
+  });
 });
 
 describe('fixedHeaderFooter Directive tests,', function (){
-  console.log('describe');
   var fixedHeaderFooterGroup,
   topBottomDirectiveFactory,
   scope,
@@ -111,7 +106,6 @@ describe('fixedHeaderFooter Directive tests,', function (){
   timeout,
   $window;
   beforeEach(function(){
-    console.log('beforeEach');
     angular.mock.module('ui.bootstrap.position');
     angular.mock.module('fixedHeaderFooter');
     inject(function($rootScope, $compile, $timeout, _$window_, _fixedHeaderFooterGroup_, _topBottomDirectiveFactory_){

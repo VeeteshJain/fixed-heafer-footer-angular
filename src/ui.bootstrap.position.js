@@ -1,4 +1,3 @@
-console.log('position');
 angular.module('ui.bootstrap.position', [])
 
 /**

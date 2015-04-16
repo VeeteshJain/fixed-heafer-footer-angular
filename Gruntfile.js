@@ -22,11 +22,14 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      all: [ 'Gruntfile.js', 'app/*.js', 'app/**/*.js' ]
+      options: {
+        reporter: require('jshint-stylish')
+      },
+      all: [ 'Gruntfile.js', 'karma.conf.js', 'src/*.js' ]
     },
     karma: {
       options: {
-        configFile: 'config/karma.conf.js'
+        configFile: 'karma.conf.js'
       },
       unit: {
         singleRun: true
@@ -35,12 +38,18 @@ module.exports = function(grunt) {
         singleRun: false,
         autoWatch: true
       }
+    },
+    clean: {
+      dist: {
+        src: [ 'dist/*' ]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-karma');
 
   //grunt.registerTask('default', ['jshint']);
@@ -48,5 +57,6 @@ module.exports = function(grunt) {
   grunt.registerTask('uglifyDist', ['uglify:dist']);
   grunt.registerTask('jshintDist', ['jshint:all']);
   grunt.registerTask('karmaUnit', ['karma:unit']);
-  grunt.registerTask('build', ['concat:dist', 'uglify:dist']);
+  grunt.registerTask('cleanDist', ['clean:dist']);
+  grunt.registerTask('build', ['jshint:all', 'karma:unit', 'clean:dist', 'concat:dist', 'uglify:dist']);
 };
